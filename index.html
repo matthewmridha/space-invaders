@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Space Invaders like Game">
+    <link rel="stylesheet" href="index.css" type="text/css">
+    <title>Space-shooter</title>
+</head>
+
+<body>
+    <div id="background"></div>
+    <div id="heroContainer"></div>
+    <div id="missileContainer"></div>
+    <div id="enemiesContainer"></div>
+    <div id="score_level">
+        <div id="score"></div>
+        <div id="level"></div>
+    </div>
+
+</body>
+<script>
+    const containerWidth = document.getElementById("heroContainer").offsetWidth;
+    const containerHeight = document.getElementById("heroContainer").offsetHeight;
+    const numericHeight = 500;
+    const heroHeight = 50;
+    const heroWidth = 50;
+    const enemyHeight = 50;
+    const enemyWidth = 50;
+    const paddingSmall = 5;
+    const enemyHitPoints = 10;
+
+    let heroPosition = {
+        top: (containerHeight - 100),
+        left: (containerWidth / 2 - heroWidth)
+    };
+
+    let enemiesOnBoard = 0;
+    let missiles = [];
+    let enemies = [];
+    let score = 0;
+    let level = 1;
+
+    let scoreCard = document.getElementById("score");
+    let lvl = document.getElementById("level");
+
+    document.addEventListener("DOMContentLoaded", function() {
+        scoreCard.innerHTML = "Score : " + score;
+        lvl.innerHTML = "LVL-" + level;
+        drawHero();
+        makeEnemies(1);
+
+    })
+
+    document.onkeydown = (e) => {
+        // left
+        if (e.keyCode === 37) {
+            if (heroPosition.left >= 0 + paddingSmall) {
+                heroPosition.left = heroPosition.left - 5;
+                moveHero();
+
+            }
+            // right
+        } else if (e.keyCode === 39) {
+            if (heroPosition.left <= containerWidth - heroWidth - paddingSmall) {
+                heroPosition.left = heroPosition.left + 5;
+                moveHero();
+            }
+
+            // up
+        } else if (e.keyCode === 38) {
+            if (heroPosition.top >= 0 + paddingSmall) {
+                heroPosition.top = heroPosition.top - 5;
+                moveHero();
+            }
+            // down
+        } else if (e.keyCode === 40) {
+            if (heroPosition.top <= containerHeight - heroHeight - paddingSmall) {
+                heroPosition.top = heroPosition.top + 5;
+                moveHero();
+            }
+            // space - SHOOT
+        } else if (e.keyCode === 32) {
+            missiles.push({
+                top: heroPosition.top,
+                left: heroPosition.left + 20
+            });
+            drawMissiles();
+        }
+
+    };
+    drawHero = () => {
+        let heroContainer = document.getElementById("heroContainer");
+        heroContainer.innerHTML = "";
+        heroContainer.innerHTML += `<div id='hero' style='top:${ heroPosition.top + "px" }; left:${ heroPosition.left + "px" }'></div>`;
+    }
+    moveHero = () => {
+        let hero = document.getElementById("hero")
+        hero.style.top = heroPosition.top + "px";
+        hero.style.left = heroPosition.left + "px";
+    };
+    drawMissiles = () => {
+        let missileContainer = document.getElementById("missileContainer");
+        missileContainer.innerHTML = "";
+        for (let i = 0; i < missiles.length; i++) {
+            missileContainer.innerHTML += `<div class='missile' style='top:${ missiles[i].top + 'px' }; left:${ missiles[i].left + 'px' }'></div>`;
+        }
+    };
+    moveMissiles = () => {
+        for (let i = 0; i < missiles.length; i++) {
+            if (missiles[i].top <= 0) {
+                missiles.splice(i, 1);
+            } else {
+                missiles[i].top = missiles[i].top - 5;
+            }
+        }
+    };
+    makeEnemies = (number) => {
+        enemiesOnBoard += number;
+        for (let i = 0; i < number; i++) {
+            let w = (containerWidth / number) * i + enemyWidth * 2;
+            enemies.push({
+                top: 50,
+                left: w
+            })
+        }
+    };
+    drawEnemies = () => {
+        let enemyContainer = document.getElementById("enemiesContainer");
+        enemyContainer.innerHTML = "";
+        for (let i = 0; i < enemies.length; i++) {
+            enemyContainer.innerHTML += `<div class='enemy' style='top:${ enemies[i].top + 'px' }; left:${ enemies[i].left + 'px' }'></div>`;
+
+        }
+    };
+    moveEnemies = () => {
+        for (let i = 0; i < enemies.length; i++) {
+            if (enemies[i].top + enemyHeight + paddingSmall >= containerHeight) {
+                enemies.splice(i, 1);
+                enemiesOnBoard -= 1;
+                checkEnemies();
+            } else {
+                enemies[i].top = enemies[i].top + 5;
+
+            }
+        }
+    };
+    moveEnemiesHorizontal = () => {
+        for (let i = 0; i < enemies.length; i++) {
+            let left = true;
+            if (left === true) {
+                if (enemies[i].left <= 10) {
+                    left = false;
+                    enemies[i].left = enemies[i].left + 1;
+
+                }
+                enemies[i].left = enemies[i].left - 1;
+            }
+
+
+        };
+    };
+    targetHit = () => {
+        for (let enemy = 0; enemy < enemies.length; enemy++) {
+            for (let missile = 0; missile < missiles.length; missile++) {
+                if (missiles[missile].top <= enemies[enemy].top + 50 && missiles[missile].top > enemies[enemy].top && missiles[missile].left >= enemies[enemy].left && missiles[missile].left <= enemies[enemy].left + 50) {
+                    missiles.splice(missile, 1);
+                    enemies.splice(enemy, 1);
+                    score += enemyHitPoints;
+                    enemiesOnBoard -= 1;
+                    checkEnemies();
+                }
+            }
+        }
+    };
+    checkEnemies = () => {
+        if (enemiesOnBoard <= 0) {
+            level = level + 1;
+            levelUp();
+        }
+    };
+    levelUp = () => {
+        if (level >= 1 && level < 2) {
+            makeEnemies(level);
+        } else if (level >= 2 && level <= 4) {
+            makeEnemies(level);
+
+        };
+
+    }
+
+    gameloop = () => {
+        setTimeout(gameloop, 100);
+        moveMissiles();
+        drawMissiles();
+        moveEnemies();
+        moveEnemiesHorizontal();
+        drawEnemies();
+        targetHit();
+        scoreCard.innerHTML = "Score : " + score;
+        lvl.innerHTML = "LVL - " + level;
+
+    }
+    gameloop();
+</script>
+
+</html>

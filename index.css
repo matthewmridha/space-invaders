@@ -1,13 +1,7 @@
 :root {
     --width: 100vw;
     --height: 100vh;
-}
-
-.body {
-    width: var(--width);
-    height: var(--height);
-    overflow-x: hidden;
-    overflow-y: hidden;
+    --max-width: 800px;
 }
 
 #background {
@@ -20,6 +14,7 @@
     left: 0;
     width: var(--width);
     height: var(--height);
+    max-width: var(--max-width);
     overflow-x: hidden;
     overflow-y: hidden;
 }
@@ -28,6 +23,7 @@
     position: absolute;
     width: var(--width);
     height: var(--height);
+    max-width: var(--max-width);
     top: 0;
     left: 0;
     overflow-x: hidden;
@@ -38,6 +34,7 @@
     position: absolute;
     width: var(--width);
     height: var(--height);
+    max-width: var(--max-width);
     top: 0;
     left: 0;
     overflow-x: hidden;
@@ -50,6 +47,18 @@
     left: 0;
     width: var(--width);
     height: var(--height);
+    max-width: var(--max-width);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#enemyMissileContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--width);
+    height: var(--height);
+    max-width: var(--max-width);
     overflow-x: hidden;
     overflow-y: hidden;
 }
@@ -90,10 +99,86 @@
 }
 
 .enemy {
-    background-image: url(/assets/enemy.png);
+    background-image: url(/assets/ufo.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
     position: absolute;
-    top: 100;
-    left: 100;
     height: 50px;
     width: 50px;
+}
+
+.enemyMissile {
+    background-image: url(./assets/missile2.png);
+    position: absolute;
+    height: 28px;
+    width: 10px;
+    transform: rotate(180deg);
+}
+
+#boss {
+    background-image: url(/assets/mothership1.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 200px;
+    height: 80px;
+    transform: rotate(-10deg)
+}
+
+#endGame {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 35px;
+    color: yellowgreen;
+    display: flex;
+    flex-direction: row;
+    font-family: monospace;
+    text-shadow: 1px 1px 1px purple;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#finalScore {
+    display: block;
+    z-index: 1000;
+}
+
+#startmodule {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: yellowgreen;
+    display: flex;
+    font-family: monospace;
+    text-shadow: 1px 1px 1px purple;
+    display: flex;
+}
+
+#start {
+    position: absolute;
+    left: auto;
+    right: auto;
+    z-index: 10000;
+    background: transparent;
+    border: 3px solid yellowgreen;
+    padding: 200px;
+}
+
+#start:hover {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
 }

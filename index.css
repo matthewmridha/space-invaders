@@ -83,7 +83,7 @@
 }
 
 #hero {
-    background-image: url(/assets/hero.png);
+    background-image: url(./assets/hero.png);
     position: absolute;
     height: 50px;
     width: 50px;
@@ -91,7 +91,7 @@
 }
 
 .missile {
-    background-image: url(/assets/missile1.png);
+    background-image: url(./assets/missile1.png);
     position: absolute;
     height: 28px;
     width: 10px;
@@ -99,7 +99,7 @@
 }
 
 .enemy {
-    background-image: url(/assets/ufo.png);
+    background-image: url(./assets/ufo.png);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -117,7 +117,7 @@
 }
 
 #boss {
-    background-image: url(/assets/mothership1.png);
+    background-image: url(./assets/mothership1.png);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
